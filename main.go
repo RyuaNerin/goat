@@ -159,7 +159,12 @@ func (t *TranslateUnit) Translate() error {
 		return err
 	}
 	for i, name := range functions {
-		functions[i].Lines = assembly[name.Name]
+		if asm, ok := assembly[name.Name]; ok {
+			functions[i].Lines = asm
+		}
+		if asm, ok := assembly["_"+name.Name]; ok {
+			functions[i].Lines = asm
+		}
 	}
 	return generateGoAssembly(t.GoAssembly, functions)
 }
